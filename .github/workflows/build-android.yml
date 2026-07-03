@@ -40,25 +40,25 @@ jobs:
         run: |
           python -m pip install --upgrade pip buildozer cython kivy
 
-      - name: Setup Android SDK and accept licenses
+      - name: Setup Android SDK
         run: |
           mkdir -p $HOME/android-sdk
           cd $HOME/android-sdk
-          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdline-tools.zip
-          unzip -q cmdline-tools.zip
+          curl -sL -o cmdline-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+          unzip -qo cmdline-tools.zip
           mkdir -p cmdline-tools
           mv cmdline-tools latest
           
-          # Accept all SDK licenses
+          # Accept SDK licenses
           mkdir -p $HOME/android-sdk/cmdline-tools/latest/licenses
-          echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > $HOME/android-sdk/cmdline-tools/latest/licenses/android-sdk-license
-          echo -e "\nd56f5187479451eabf01fb78af6dfcb131a64d1f" >> $HOME/android-sdk/cmdline-tools/latest/licenses/android-sdk-license
-          echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" >> $HOME/android-sdk/cmdline-tools/latest/licenses/android-sdk-license
+          printf '\n8933bad161af4178b1185d1a37fbf41ea5269c55\n' > $HOME/android-sdk/cmdline-tools/latest/licenses/android-sdk-license
+          printf '\nd56f5187479451eabf01fb78af6dfcb131a64d1f\n' >> $HOME/android-sdk/cmdline-tools/latest/licenses/android-sdk-license
+          printf '\n84831b9409646a918e30573bab4c9c91346d8abd\n' >> $HOME/android-sdk/cmdline-tools/latest/licenses/android-sdk-license
           
           export ANDROID_HOME=$HOME/android-sdk
           export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
           
-          # Install required SDK packages
+          sdkmanager --licenses
           sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0" "ndk;25.2.9519653"
           
           echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
