@@ -1,13 +1,9 @@
-# GitHub Actions Workflow for Android APK Build
-# This workflow uses buildozer to compile your Kivy app into an APK
-# Run it from: https://github.com/settings/actions
-
 name: Build Android APK
 
 on:
-  workflow_dispatch:  # Manual trigger from Actions tab
+  workflow_dispatch:
   push:
-    branches: [main, master]
+    branches: [main]
     paths:
       - 'android_version/**'
 
@@ -27,65 +23,59 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
+      - name: Install system dependencies
         run: |
-          pip install --upgrade pip
-          pip install buildozer cython
           sudo apt-get update -qq
           sudo apt-get install -y -qq \
-            build-essential \
-            git \
-            python3 \
-            python3-dev \
-            ffmpeg \
-            libsdl2-dev \
-            libsdl2-image-dev \
-            libsdl2-mixer-dev \
-            libsdl2-ttf-dev \
-            libportmidi-dev \
-            libswscale-dev \
-            libavformat-dev \
-            libavcodec-dev \
-            zlib1g-dev \
-            libgstreamer1.0 \
-            gstreamer1.0-plugins-base \
-            gstreamer1.0-plugins-good \
-            openjdk-17-jdk \
-            autoconf \
-            automake \
-            libtool \
-            unzip \
-            curl
+            build-essential git python3 python3-dev ffmpeg \
+            libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev \
+            libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev \
+            zlib1g-dev libgstreamer1.0-dev \
+            gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
+            openjdk-17-jdk-headless \
+            autoconf automake libtool unzip curl wget \
+            ant ant-optional
 
-      - name: Setup Android SDK & NDK
+      - name: Install Python dependencies
         run: |
-          mkdir -p ${{ github.workspace }}/android-sdk
-          cd ${{ github.workspace }}/android-sdk
-          curl -sLO https://dl.google.com/android/repository/commandlinetools-linux-11716616_latest.zip -o cmdline-tools.zip
-          unzip -qo cmdline-tools.zip
+          python -m pip install --upgrade pip buildozer cython kivy
+
+      - name: Setup Android SDK
+        run: |
+          mkdir -p $HOME/android-sdk
+          cd $HOME/android-sdk
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdline-tools.zip
+          unzip -q cmdline-tools.zip
           mkdir -p cmdline-tools
           mv cmdline-tools latest
-          export ANDROID_HOME=$PWD
-          export PATH=$PATH:$PWD/cmdline-tools/latest/bin
-          yes | sdkmanager --licenses > /dev/null 2>&1
-          sdkmanager "platforms;android-33" "build-tools;33.0.0"
-          sdkmanager "ndk;25.2.9519653"
-          echo "ANDROID_HOME=$PWD" >> $GITHUB_ENV
-          echo "ANDROID_SDK_ROOT=$PWD" >> $GITHUB_ENV
-          echo "ANDROID_NDK_ROOT=$PWD/ndk/25.2.9519653" >> $GITHUB_ENV
+          export ANDROID_HOME=$HOME/android-sdk
+          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+          yes | sdkmanager --licenses 2>/dev/null || true
+          sdkmanager "platforms;android-33" "build-tools;33.0.0" "ndk;25.2.9519653" 2>/dev/null || true
+          echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+          echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
+          echo "ANDROID_NDK_ROOT=$HOME/android-sdk/ndk/25.2.9519653" >> $GITHUB_ENV
 
       - name: Build APK with Buildozer
         run: |
-          cd ${{ github.workspace }}/project/android_version
-          buildozer android debug 2>&1 | tail -50
+          cd $HOME/project/android_version
+          export ANDROID_HOME=$HOME/android-sdk
+          export ANDROID_SDK_ROOT=$HOME/android-sdk
+          export ANDROID_NDK_ROOT=$HOME/android-sdk/ndk/25.2.9519653
+          buildozer android debug 2>&1 | tee /tmp/build.log | tail -50
         env:
-          ANDROID_HOME: ${{ github.workspace }}/android-sdk
-          ANDROID_SDK_ROOT: ${{ github.workspace }}/android-sdk
-          ANDROID_NDK_ROOT: ${{ github.workspace }}/android-sdk/ndk/25.2.9519653
+          ANDROID_HOME: $HOME/android-sdk
+          ANDROID_SDK_ROOT: $HOME/android-sdk
+          ANDROID_NDK_ROOT: $HOME/android-sdk/ndk/25.2.9519653
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: watchlist-apk
-          path: project/android_version/bin/*.apk
+          path: $HOME/project/android_version/bin/*.apk
           retention-days: 14
+
+      - name: Show build log on failure
+        if: failure()
+        run: |
+          cat /tmp/build.log 2>/dev/null || echo "No build log found"
