@@ -1,0 +1,290 @@
+{
+  "active_wl": "全球主要指數",
+  "watchlists": {
+    "全球主要指數": [
+      [
+        "SPX",
+        "^GSPC",
+        "S&P 500"
+      ],
+      [
+        "NASDAQ",
+        "^IXIC",
+        "NASDAQ Composite"
+      ],
+      [
+        "DOW",
+        "^DJI",
+        "Dow Jones"
+      ],
+      [
+        "FTSE100",
+        "^FTSE",
+        "UK FTSE 100"
+      ],
+      [
+        "DAX",
+        "^GDAXI",
+        "Germany DAX"
+      ],
+      [
+        "日經225",
+        "^N225",
+        "Nikkei 225"
+      ],
+      [
+        "上證綜指",
+        "000001.SS",
+        "SSE Composite"
+      ],
+      [
+        "恒生指數",
+        "^HSI",
+        "Hang Seng"
+      ],
+      [
+        "KOSPI",
+        "^KS11",
+        "Korea KOSPI"
+      ],
+      [
+        "ASX200",
+        "^AXJO",
+        "Australia ASX 200"
+      ],
+      [
+        "臺灣加權指數",
+        "^TWII",
+        "^TWII"
+      ],
+      [
+        "費城半導體指數",
+        "^SOX",
+        "^SOX"
+      ]
+    ],
+    "科技股 ETF": [
+      [
+        "QQQ",
+        "QQQ",
+        "Invesco QQQ Trust"
+      ],
+      [
+        "VGT",
+        "VGT",
+        "Vanguard Information Tech"
+      ]
+    ],
+    "TAIWAN": [
+      [
+        "臺積電",
+        "2330.TW",
+        "2330.TW"
+      ],
+      [
+        "聯發科",
+        "2454.TW",
+        "2454.TW"
+      ],
+      [
+        "臺達電",
+        "2308.TW",
+        "2308.TW"
+      ],
+      [
+        "2317.TW - 鴻海",
+        "2317.TW",
+        "鴻海"
+      ],
+      [
+        "3711.TW - 日月光",
+        "3711.TW",
+        "日月光"
+      ],
+      [
+        "元大臺灣50",
+        "0050.TW",
+        "0050.TW"
+      ],
+      [
+        "聯電",
+        "2303.TW",
+        "2303.TW"
+      ],
+      [
+        "國巨",
+        "2327.TW",
+        "2327.TW"
+      ],
+      [
+        "台光電",
+        "2383.TW",
+        "2383.TW"
+      ],
+      [
+        "2881.TW - 富邦金",
+        "2881.TW",
+        "富邦金"
+      ],
+      [
+        "2882.TW - 國泰金",
+        "2882.TW",
+        "國泰金"
+      ],
+      [
+        "欣興電",
+        "3037.TW",
+        "3037.TW"
+      ],
+      [
+        "2382.TW - 廣達",
+        "2382.TW",
+        "廣達"
+      ],
+      [
+        "中信金",
+        "2891.TW",
+        "2891.TW"
+      ],
+      [
+        "南亞科",
+        "2408.TW",
+        "2408.TW"
+      ],
+      [
+        "智邦",
+        "2345.TW",
+        "2345.TW"
+      ],
+      [
+        "鴻勁",
+        "7769.TW",
+        "7769.TW"
+      ],
+      [
+        "南亞",
+        "1303.TW",
+        "1303.TW"
+      ],
+      [
+        "中華電",
+        "2412.TW",
+        "2412.TW"
+      ],
+      [
+        "致茂電",
+        "2360.TW",
+        "2360.TW"
+      ],
+      [
+        "玉山金",
+        "2884.TW",
+        "2884.TW"
+      ]
+    ],
+    "USA": [
+      [
+        "NVDA - NVIDIA Corp.",
+        "NVDA",
+        "NVIDIA Corp."
+      ],
+      [
+        "AAPL - Apple Inc.",
+        "AAPL",
+        "Apple Inc."
+      ],
+      [
+        "MSFT - Microsoft Corp.",
+        "MSFT",
+        "Microsoft Corp."
+      ],
+      [
+        "GOOGL - Alphabet Inc.",
+        "GOOGL",
+        "Alphabet Inc."
+      ],
+      [
+        "SPCX - SpaceX Corp.",
+        "SPCX",
+        "SPCX"
+      ],
+      [
+        "AMZN - Amazon.com Inc.",
+        "AMZN",
+        "Amazon.com Inc."
+      ],
+      [
+        "META - Meta Platforms Inc.",
+        "META",
+        "Meta Platforms Inc."
+      ],
+      [
+        "AVGO - Broadcom Inc.",
+        "AVGO",
+        "Broadcom Inc."
+      ],
+      [
+        "TSLA - Tesla Inc.",
+        "TSLA",
+        "Tesla Inc."
+      ],
+      [
+        "BRK-B - Berkshire Hathaway",
+        "BRK-B",
+        "Berkshire Hathaway"
+      ],
+      [
+        "LLY - Eli Lilly",
+        "LLY",
+        "Eli Lilly"
+      ],
+      [
+        "JPM - JPMorgan Chase",
+        "JPM",
+        "JPMorgan Chase"
+      ],
+      [
+        "WMT - Walmart Inc.",
+        "WMT",
+        "Walmart Inc."
+      ],
+      [
+        "HD - Home Depot",
+        "HD",
+        "Home Depot"
+      ],
+      [
+        "UNH - UnitedHealth",
+        "UNH",
+        "UnitedHealth"
+      ],
+      [
+        "MA - Mastercard Inc.",
+        "MA",
+        "Mastercard Inc."
+      ],
+      [
+        "ABBV - AbbVie Inc.",
+        "ABBV",
+        "AbbVie Inc."
+      ],
+      [
+        "XOM - Exxon Mobil",
+        "XOM",
+        "Exxon Mobil"
+      ],
+      [
+        "美光",
+        "MU",
+        "MU"
+      ],
+      [
+        "英特爾",
+        "INTC",
+        "INTC"
+      ]
+    ]
+  },
+  "lang": "zh-TW",
+  "theme": "dark"
+}

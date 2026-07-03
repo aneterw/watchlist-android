@@ -1,0 +1,6 @@
+yfinance
+kivy
+kivy_garden.graph
+pandas
+numpy
+matplotlib
