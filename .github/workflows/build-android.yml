@@ -41,31 +41,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install buildozer cython kivy==2.3.1
 
-      - name: Setup Android SDK and NDK
+      - name: Pre-accept Android SDK licenses
         run: |
-          mkdir -p $HOME/android-sdk
-          cd $HOME/android-sdk
+          mkdir -p $HOME/android-sdk/licenses
+          # Android SDK license hash
+          echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > $HOME/android-sdk/licenses/android-sdk-license
+          # NDK license hash
+          echo "d56f5187479451eabf01fb78af6dfcb131a64d1f" >> $HOME/android-sdk/licenses/android-sdk-license
+          # Build tools license
+          echo "84831b9409646a918e30573bab4c9c91346d8abd" >> $HOME/android-sdk/licenses/android-sdk-license
           
-          # Download Android command-line tools
-          curl -sL -o cmdline-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
-          unzip -qo cmdline-tools.zip
-          mkdir -p cmdline-tools/latest
-          mv cmdline-tools/* cmdline-tools/latest/ 2>/dev/null || true
-          
-          # Accept SDK licenses
-          mkdir -p cmdline-tools/latest/licenses
-          printf '\n8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a64d1f\n84831b9409646a918e30573bab4c9c91346d8abd\n' > cmdline-tools/latest/licenses/android-sdk-license
-          
-          export ANDROID_HOME=$HOME/android-sdk
-          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
-          
-          # Install SDK packages
-          yes | sdkmanager --licenses 2>/dev/null || true
-          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;27.0.12077973"
-          
-          echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
-          echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
-          echo "ANDROID_NDK_ROOT=$HOME/android-sdk/ndk/27.0.12077973" >> $GITHUB_ENV
+          echo "SDK licenses pre-accepted"
+          cat $HOME/android-sdk/licenses/android-sdk-license
 
       - name: Build APK with Buildozer
         run: |
@@ -73,9 +60,8 @@ jobs:
           
           export ANDROID_HOME=$HOME/android-sdk
           export ANDROID_SDK_ROOT=$HOME/android-sdk
-          export ANDROID_NDK_ROOT=$HOME/android-sdk/ndk/27.0.12077973
           
-          # Build directly (no clean first to avoid FileNotFoundError)
+          # Build with error handling and logging
           set -e
           buildozer android debug 2>&1 | tee /tmp/build.log
           
