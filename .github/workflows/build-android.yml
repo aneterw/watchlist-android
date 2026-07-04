@@ -41,9 +41,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install buildozer cython kivy==2.3.1
 
-      - name: Setup Android SDK and NDK manually
+      - name: Setup Android SDK and NDK
         run: |
           mkdir -p $HOME/android-sdk
+          
+          # Accept SDK licenses in the CORRECT location
+          mkdir -p $HOME/android-sdk/licenses
+          echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > $HOME/android-sdk/licenses/android-sdk-license
+          echo "d56f5187479451eabf01fb78af6dfcb131a64d1f" >> $HOME/android-sdk/licenses/android-sdk-license
+          echo "84831b9409646a918e30573bab4c9c91346d8abd" >> $HOME/android-sdk/licenses/android-sdk-license
+          
+          echo "SDK licenses accepted:"
+          cat $HOME/android-sdk/licenses/android-sdk-license
+          
           cd $HOME/android-sdk
           
           # Download Android command-line tools
@@ -52,14 +62,10 @@ jobs:
           mkdir -p cmdline-tools/latest
           mv cmdline-tools/* cmdline-tools/latest/ 2>/dev/null || true
           
-          # Accept SDK licenses FIRST
-          mkdir -p cmdline-tools/latest/licenses
-          printf '\n8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a64d1f\n84831b9409646a918e30573bab4c9c91346d8abd\n' > cmdline-tools/latest/licenses/android-sdk-license
-          
           export ANDROID_HOME=$HOME/android-sdk
           export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
           
-          # Install SDK packages (this will work because licenses are accepted)
+          # Now install SDK packages (licenses are accepted)
           sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;27.0.12077973"
           
           echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
@@ -67,7 +73,6 @@ jobs:
           echo "ANDROID_NDK_ROOT=$HOME/android-sdk/ndk/27.0.12077973" >> $GITHUB_ENV
           
           # Verify installation
-          ls -la $HOME/android-sdk/
           ls -la $HOME/android-sdk/platforms/
           ls -la $HOME/android-sdk/build-tools/
           ls -la $HOME/android-sdk/ndk/
@@ -79,12 +84,6 @@ jobs:
           export ANDROID_HOME=$HOME/android-sdk
           export ANDROID_SDK_ROOT=$HOME/android-sdk
           export ANDROID_NDK_ROOT=$HOME/android-sdk/ndk/27.0.12077973
-          
-          # Show environment
-          echo "ANDROID_HOME=$ANDROID_HOME"
-          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
-          echo "ANDROID_NDK_ROOT=$ANDROID_NDK_ROOT"
-          echo "PATH=$PATH"
           
           # Build with error handling and logging
           set -e
