@@ -80,7 +80,7 @@ LANG = {
     "btn_refresh_all":{"zh-TW":"更新所有價格","zh-CN":"更新所有价格","en":"Refresh All","ja":"全て更新","ko":"전체 새로고침","es":"Actualizar Todo"},
     "col_name":{"zh-TW":"名稱","zh-CN":"名称","en":"Name","ja":"名称","ko":"이름","es":"Nombre"},
     "col_ticker":{"zh-TW":"Ticker","zh-CN":"Ticker","en":"Ticker","ja":"ティッカー","ko":"티커","es":"Ticker"},
-    "col_price":{"zh-TW":"現價","zh-CN":"现价","en":"Price","ja":"現在値","ko":"현재가","es":"Precio"},
+    "col_price":{"zh-TW":"現價 (報價延遲15~20分鐘)","zh-CN":"现价 (报价延迟15~20分钟)","en":"Price (Delayed 15-20 min)","ja":"現在値 (気配延期15~20分)","ko":"현재가 (시세 지연 15~20분)","es":"Precio (Retraso 15-20 min)"},
     "col_change":{"zh-TW":"漲跌","zh-CN":"涨跌","en":"Change","ja":"前日比","ko":"등락","es":"Cambio"},
     "col_pct":{"zh-TW":"漲跌幅","zh-CN":"涨跌幅","en":"% Chg","ja":"騰落率","ko":"등락률","es":"% Var"},
     "col_vol":{"zh-TW":"成交量","zh-CN":"成交量","en":"Volume","ja":"出来高","ko":"거래량","es":"Volumen"},
@@ -586,7 +586,7 @@ class WatchlistApp:
         self.item_tree.heading("change", text=t("col_change"))
         self.item_tree.heading("pct", text=t("col_pct"))
         self.item_tree.heading("vol", text=t("col_vol"))
-        for col_id, w in [("label",150),("ticker",90),("price",95),
+        for col_id, w in [("label",150),("ticker",90),("price",170),
                            ("change",80),("pct",75),("vol",90)]:
             anchor = tk.W if col_id == "label" else tk.E if col_id != "ticker" else tk.CENTER
             self.item_tree.column(col_id, width=w, anchor=anchor)
