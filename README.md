@@ -1,3 +1,5 @@
+### 中文 | [English](https://github.com/aneterw/yfinance-Watchlist-Manager/blob/main/README.md)
+
 # yfinance Watchlist Manager — 使用說明
 
 ## 1. 安裝與啟動
@@ -50,12 +52,12 @@ python watchlist_app.py
 
 程式啟動時，左側會自動建立兩個預設 Watchlist：
 
-| Watchlist 名稱 | 內含商品 |
-|---|---|
-| 全球主要指數 | S&P 500、NASDAQ、道瓊、FTSE100、DAX、日經225、上證綜指、恒生、KOSPI、ASX200 |
-| 科技股 ETF | QQQ、VGT |
-| TAIWAN | 台積電、鴻海、聯發科等 |
-| USA | 蘋果、微軟、Google 等 |
+| Watchlist 名稱 | 內含商品                                                     |
+| ------------ | -------------------------------------------------------- |
+| 全球主要指數       | S&P 500、NASDAQ、道瓊、FTSE100、DAX、日經225、上證綜指、恒生、KOSPI、ASX200 |
+| 科技股 ETF      | QQQ、VGT                                                  |
+| TAIWAN       | 台積電、鴻海、聯發科等                                              |
+| USA          | 蘋果、微軟、Google 等                                           |
 
 點擊左側的 Watchlist 名稱，右側會顯示該清單內所有商品。
 
@@ -64,11 +66,13 @@ python watchlist_app.py
 ### 3.2 新增 / 刪除 Watchlist
 
 **新增：**
+
 1. 點擊上方工具列的 **「＋ 新增 Watchlist」**
 2. 輸入新清單名稱（如「我的自選股」）
 3. 按 Enter 或點擊 OK
 
 **刪除：**
+
 1. 在左側點擊要刪除的 Watchlist
 2. 點擊 **「－ 刪除 Watchlist」**
 3. 確認對話框，選擇 Yes
@@ -98,6 +102,7 @@ python watchlist_app.py
 4. 按 Enter 或點擊「加入」
 
 > 常見 ticker 一覽：
+> 
 > ```
 > AAPL       Apple Inc.
 > MSFT       Microsoft Corp.
@@ -128,12 +133,16 @@ python watchlist_app.py
 ### 3.5 更新價格
 
 #### 更新目前 Watchlist
+
 **方法：** 點擊上方工具列的 **「更新目前 WL」**
+
 - 只更新目前選中的 Watchlist 內的商品
 - 不影響其他 Watchlist 的價格
 
 #### 更新所有價格
+
 **方法：** 點擊上方工具列的 **「更新所有價格」**
+
 - 更新所有 Watchlist 內的所有商品
 - 程式會**背景 threading 執行**，不會卡住視窗
 - 狀態欄會顯示「正在更新…請稍候」
@@ -144,12 +153,12 @@ python watchlist_app.py
 
 價格欄位說明：
 
-| 欄位 | 說明 |
-|---|---|
-| 現價 | 目前市場價格 |
-| 漲跌 | 今日漲跌金額 |
+| 欄位  | 說明       |
+| --- | -------- |
+| 現價  | 目前市場價格   |
+| 漲跌  | 今日漲跌金額   |
 | 漲跌幅 | 今日漲跌幅（%） |
-| 成交量 | 今日成交量 |
+| 成交量 | 今日成交量    |
 
 > 注意：部分指數（`^` 開頭）或外匯沒有成交量資料，會顯示 N/A。
 
@@ -166,11 +175,13 @@ python watchlist_app.py
 **操作方法：** 在「商品價格」列表中，**雙擊**任一行商品，即可開啟 K 線圖視窗。
 
 K 線圖視窗包含三個子圖：
+
 1. **K 線圖**（上）：紅漲綠跌，顯示 OHLC 價格走勢
 2. **成交量**（中）：柱狀圖顯示交易量
 3. **KD 指標**（下）：K 線（橘色）與 D 線（藍色），輔助買賣信號
 
 週期切換：
+
 - **日線**：近 2 年每日數據
 - **週線**：近 10 年每週數據
 - **月線**：近 30 年每月數據
@@ -180,13 +191,17 @@ K 線圖視窗包含三個子圖：
 ### 3.8 主題與語言切換
 
 #### 主題（Theme）
+
 選單列 **Theme** → 可切換：
+
 - 🌓 System：跟隨 Windows 系統設定
 - ☀ Light：日間模式（白底黑字）
 - 🌙 Dark：暗黑模式（深底淺字）
 
 #### 語言（Language）
+
 選單列 **Language** → 可切換：
+
 - 繁體中文
 - 简体中文
 - English
@@ -201,19 +216,21 @@ K 線圖視窗包含三個子圖：
 ### 3.9 資料儲存
 
 程式會自動將 Watchlist 內容、語言和主題設定儲存在 `watchlist_data.json` 檔案中（與程式同目錄）。
+
 - **每次修改 Watchlist 時即時儲存**
 - **關閉程式時再次強制儲存**
 - 下次啟動時自動載入上次狀態
-
 
 ---
 
 ## 4. 常見問題 FAQ
 
 ### Q：可以一次更新單一 Watchlist 嗎？
+
 A：可以。點擊上方工具列的 **「更新目前 WL」** 只更新目前選中的 Watchlist；點擊 **「更新所有價格」** 則更新全部。
 
 ### Q：資料會永久保存嗎？
+
 A：會的。程式會自動將 Watchlist、語言和主題設定儲存在 `watchlist_data.json` 檔案中，下次啟動自動恢復。
 
 ---
@@ -221,7 +238,9 @@ A：會的。程式會自動將 Watchlist、語言和主題設定儲存在 `watc
 ## 4. 常見問題 FAQ
 
 ### Q：搜尋不到我要的 ticker 怎麼辦？
+
 A：
+
 1. 改用 **方式 C（直接輸入 Ticker）**，在對話框手動輸入官方 ticker 代碼
 2. 常見格式：
    - 美股：`AAPL`、`GOOGL`
@@ -232,31 +251,36 @@ A：
    - 匯率：`EURUSD=X`
 
 ### Q：更新價格很慢或失敗？
+
 A：
+
 - yfinance 需要連接網路，請確認網路連線
 - Yahoo Finance 偶有流量限制，若短時間大量抓取可能被暫時封鎖，稍後再試即可
 - 程式內建常見 ticker 索引，搜尋功能不依賴網路
 
 ### Q：K 線圖無法顯示？
+
 A：
+
 - 請確認已安裝 `matplotlib` 和 `mplfinance`（`pip install matplotlib mplfinance`）
 - 部分加密貨幣或外匯資料較少，K 線圖可能顯示空白
 
 ### Q：暗黑模式下某些文字看不清？
+
 A：暗黑模式已針對對比度優化，若仍有問題可嘗試切換回 System 或 Light 主題。
 
 ---
 
 ## 6. 技術架構說明（供開發者參考）
 
-| 元件 | 說明 |
-|---|---|
-| `yfinance` | 向 Yahoo Finance API 取得即時股價 |
-| `tkinter` / `ttk` | 內建 GUI 框架 |
-| `threading` | 背景抓價，避免界面卡死 |
-| `watchlists` 字典 | 核心資料結構，Key=名稱，Value=[(顯示名, ticker, 全名)] |
-| `fetch_price()` | 單一 ticker 抓價函式，回傳完整價格dict |
-| `search_yfinance()` | 搜尋函式，使用 yfinance 原生搜尋 + 備援索引 |
+| 元件                  | 說明                                      |
+| ------------------- | --------------------------------------- |
+| `yfinance`          | 向 Yahoo Finance API 取得即時股價              |
+| `tkinter` / `ttk`   | 內建 GUI 框架                               |
+| `threading`         | 背景抓價，避免界面卡死                             |
+| `watchlists` 字典     | 核心資料結構，Key=名稱，Value=[(顯示名, ticker, 全名)] |
+| `fetch_price()`     | 單一 ticker 抓價函式，回傳完整價格dict               |
+| `search_yfinance()` | 搜尋函式，使用 yfinance 原生搜尋 + 備援索引            |
 
 ---
 
