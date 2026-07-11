@@ -9,7 +9,13 @@
 Open Command Prompt (CMD) or PowerShell and run:
 
 ```bash
-pip install yfinance
+pip install -r requirements.txt
+```
+
+Or install individually:
+
+```bash
+pip install yfinance pandas matplotlib
 ```
 
 Python version requirement: Python 3.8 or higher.
@@ -188,7 +194,35 @@ Period switching:
 
 ---
 
-### 3.8 Theme & Language Settings
+### 3.8 Right-click Menu (Fundamental Analysis, Related News)
+
+In the "Asset Prices" list, **right-click** any asset row to open the context menu:
+
+| Option | Description |
+|--------|------------|
+| Fundamental Analysis | Shows key financial indicators (PE, ROE, dividend yield, analyst target price, etc.) |
+| Related News | Displays the latest 10 news articles; click links to open in browser |
+
+#### Fundamental Analysis
+
+Included indicators:
+- Market Cap, EPS, Beta
+- Trailing/Forward PE, PEG, Price/Book
+- ROE, ROA, Operating Margin, Profit Margin
+- Free Cash Flow, Quick Ratio
+- Analyst Average/Median Target Price, Analyst Count
+- Insider %, Institutional %
+- EV/EBITDA, Dividend Yield
+
+#### Related News
+
+- Shows latest 10 news articles
+- Includes source, time, and title
+- Click title or link to open article in browser
+
+---
+
+### 3.9 Theme & Language Settings
 
 #### Theme
 
@@ -213,7 +247,7 @@ Language and theme settings are automatically saved and restored on next launch.
 
 ---
 
-### 3.9 Data Storage
+### 3.10 Data Storage
 
 The program automatically saves Watchlist contents, language, and theme settings to `watchlist_data.json` (in the same directory as the program).
 
@@ -260,7 +294,7 @@ A:
 
 A:
 
-- Make sure `matplotlib` and `mplfinance` are installed (`pip install matplotlib mplfinance`)
+- Make sure `matplotlib` is installed (`pip install matplotlib`)
 - Some cryptocurrencies or forex pairs have limited data; candlestick chart may appear empty
 
 ### Q: Some text is hard to read in dark mode?

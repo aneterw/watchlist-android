@@ -68,5 +68,7 @@
   },
   "lang": "zh-TW",
   "theme": "dark",
+  "font_family": "微軟正黑體",
+  "font_size": 13,
   "alerts": {}
 }

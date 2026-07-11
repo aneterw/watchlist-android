@@ -14,6 +14,7 @@ yfinance Watchlist Manager
 import tkinter as tk
 import pandas as pd
 import re
+import webbrowser
 from typing import Any, List, Tuple, Dict, Optional
 
 from tkinter import ttk, messagebox, simpledialog
@@ -123,6 +124,34 @@ LANG = {
     "chart_day":{"zh-TW":"日線","zh-CN":"日线","en":"Day","ja":"日足","ko":"일봉","es":"Día"},
     "chart_week":{"zh-TW":"週線","zh-CN":"周线","en":"Week","ja":"週足","ko":"주봉","es":"Semana"},
     "chart_month":{"zh-TW":"月線","zh-CN":"月线","en":"Month","ja":"月足","ko":"월봉","es":"Mes"},
+    "ctx_fundamental":{"zh-TW":"基本面分析","zh-CN":"基本面分析","en":"Fundamental Analysis","ja":"ファンダメンタル分析","ko":"펀더멘탈 분석","es":"Análisis Fundamental"},
+    "ctx_technical":{"zh-TW":"技術面分析","zh-CN":"技术面分析","en":"Technical Analysis","ja":"テクニカル分析","ko":"기술적 분석","es":"Análisis Técnico"},
+    "ctx_news":{"zh-TW":"相關新聞","zh-CN":"相关新闻","en":"Related News","ja":"関連ニュース","ko":"관련 뉴스","es":"Noticias Relacionadas"},
+    "fundamental_title":{"zh-TW":"基本面分析","zh-CN":"基本面分析","en":"Fundamental Analysis","ja":"ファンダメンタル分析","ko":"펀더멘탈 분석","es":"Análisis Fundamental"},
+    "tab_fundamental":{"zh-TW":"基本面","zh-CN":"基本面","en":"Fundamental","ja":"ファンダ","ko":"펀더","es":"Fundamental"},
+    "tab_technical":{"zh-TW":"技術面","zh-CN":"技术面","en":"Technical","ja":"テクニカル","ko":"기술","es":"Técnico"},
+    "metric_company_name":{"zh-TW":"公司名稱","zh-CN":"公司名称","en":"Company","ja":"会社名","ko":"회사명","es":"Empresa"},
+    "metric_market_cap":{"zh-TW":"市值","zh-CN":"市值","en":"Market Cap","ja":"時価総額","ko":"시가총액","es":"Cap. Mercado"},
+    "metric_eps":{"zh-TW":"每股盈餘","zh-CN":"每股收益","en":"EPS","ja":"EPS","ko":"EPS","es":"EPS"},
+    "metric_beta":{"zh-TW":"貝他值","zh-CN":"贝他值","en":"Beta","ja":"ベータ","ko":"베타","es":"Beta"},
+    "metric_trailing_pe":{"zh-TW":"目前本益比","zh-CN":"当前市盈率","en":"Trailing PE","ja":"予想PER","ko":"추정PER","es":"PER TTM"},
+    "metric_forward_pe":{"zh-TW":"預期本益比","zh-CN":"预期市盈率","en":"Forward PE","ja":"先行PER","ko":"선행PER","es":"PER Adelantado"},
+    "metric_peg":{"zh-TW":"本益成長比","zh-CN":"市盈率增长比","en":"PEG","ja":"PEG","ko":"PEG","es":"PEG"},
+    "metric_price_book":{"zh-TW":"股價淨值比","zh-CN":"市净率","en":"Price/Book","ja":"PBR","ko":"PBR","es":"Precio/Valor"},
+    "metric_roe":{"zh-TW":"股東權益報酬率","zh-CN":"净资产收益率","en":"ROE","ja":"ROE","ko":"ROE","es":"ROE"},
+    "metric_roa":{"zh-TW":"資產報酬率","zh-CN":"资产收益率","en":"ROA","ja":"ROA","ko":"ROA","es":"ROA"},
+    "metric_op_margin":{"zh-TW":"營業利潤率","zh-CN":"营业利润率","en":"Op. Margin","ja":"営業利益率","ko":"영업이익률","es":"Margen Op."},
+    "metric_profit_margin":{"zh-TW":"利潤率","zh-CN":"利润率","en":"Profit Margin","ja":"利益率","ko":"이익률","es":"Margen Benef."},
+    "metric_fcf":{"zh-TW":"自由現金流","zh-CN":"自由现金流","en":"FCF","ja":"FCF","ko":"FCF","es":"FCF"},
+    "metric_quick_ratio":{"zh-TW":"速動比率","zh-CN":"速动比率","en":"Quick Ratio","ja":"当座比率","ko":"당좌비율","es":"Ratio Rápido"},
+    "metric_debt_equity":{"zh-TW":"債務權益比","zh-CN":"负债权益比","en":"Debt/Equity","ja":"DE比","ko":"부채비율","es":"Deuda/Capital"},
+    "metric_target_mean":{"zh-TW":"分析師平均目標價","zh-CN":"分析师平均目标价","en":"Analyst Target (Avg)","ja":"アナリスト目標(平均)","ko":"애널리스트 목표(평균)","es":"Objetivo Analista (Prom)"},
+    "metric_target_median":{"zh-TW":"分析師中位數目標價","zh-CN":"分析师中位数目标价","en":"Analyst Target (Med)","ja":"アナリスト目標(中央)","ko":"애널리스트 목표(중앙)","es":"Objetivo Analista (Med)"},
+    "metric_analyst_count":{"zh-TW":"評估分析師人數","zh-CN":"评估分析师人数","en":"Analyst Count","ja":"アナリスト数","ko":"애널리스트 수","es":"Nº Analistas"},
+    "metric_insider_pct":{"zh-TW":"內部人持股","zh-CN":"内部人持股","en":"Insider %","ja":"内部者保有率","ko":"인사이드 보유율","es":"% Insiders"},
+    "metric_inst_pct":{"zh-TW":"機構持股","zh-CN":"机构持股","en":"Institutional %","ja":"機関投資家保有率","ko":"기관 보유율","es":"% Instituc."},
+    "metric_ev_ebitda":{"zh-TW":"企業價值/EBITDA","zh-CN":"企业价值/EBITDA","en":"EV/EBITDA","ja":"EV/EBITDA","ko":"EV/EBITDA","es":"EV/EBITDA"},
+    "metric_dividend_yield":{"zh-TW":"殖利率","zh-CN":"股息率","en":"Div. Yield","ja":"配当利回り","ko":"배당수익률","es":"Rend. Divid."},
     "theme_menu":{"zh-TW":"主題","zh-CN":"主题","en":"Theme","ja":"テーマ","ko":"테마","es":"Tema"},
     "lang_menu":{"zh-TW":"語言","zh-CN":"语言","en":"Language","ja":"言語","ko":"언어","es":"Idioma"},
     "font_menu":{"zh-TW":"字體","zh-CN":"字体","en":"Font","ja":"フォント","ko":"글꼴","es":"Fuente"},
@@ -408,6 +437,589 @@ def apply_theme(root, style):
         "btn_bg": btn_gray, "btn_fg": btn_text, "btn_active": btn_gray,
         "list_bg": main_gray, "list_fg": text_gray, "list_sel": sel_gray
     }
+
+
+class FundamentalAnalysisWindow:
+    """基本面分析視窗：顯示估值與財務指標"""
+    def __init__(self, parent, ticker, name, theme_mode="light"):
+        self.ticker = ticker
+        self.name = name
+        self.theme_mode = theme_mode
+
+        self.win = tk.Toplevel(parent)
+        self.win.title(f"{ticker} - {name} - {t('fundamental_title')}")
+        # 長寬高分別增加
+        self.win.geometry("1400x680")
+        self.win.transient(parent)
+        self.win.minsize(1000, 550)
+
+        # Center window on screen
+        self.win.update_idletasks()
+        sw = self.win.winfo_screenwidth()
+        sh = self.win.winfo_screenheight()
+        w, h = 1400, 680
+        x = (sw - w) // 2
+        y = (sh - h) // 2
+        self.win.geometry(f"{w}x{h}+{x}+{y}")
+
+        # Notebook for tabs
+        nb = ttk.Notebook(self.win)
+        nb.pack(fill=tk.BOTH, expand=True, padx=8, pady=8)
+
+        # === Fundamental Tab ===
+        fund_frame = ttk.Frame(nb)
+        nb.add(fund_frame, text=t("tab_fundamental"))
+
+        # Canvas with scrollbar
+        canvas = tk.Canvas(fund_frame, bg=self._bg(), highlightthickness=0)
+        scrollbar = ttk.Scrollbar(fund_frame, orient=tk.VERTICAL, command=canvas.yview)
+        scroll_frame = tk.Frame(canvas, bg=self._bg())
+
+        scroll_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        canvas.create_window((0, 0), window=scroll_frame, anchor=tk.NW)
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        # Add mousewheel scrolling
+        def _on_mousewheel(event):
+            try:
+                if canvas.winfo_exists():
+                    canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+            except tk.TclError:
+                pass
+        canvas.bind_all("<MouseWheel>", _on_mousewheel)
+        self._canvas = canvas
+        self._scroll_frame = scroll_frame
+
+        # === Technical Tab (K-line chart - same as double-click) ===
+        tech_frame = ttk.Frame(nb)
+        nb.add(tech_frame, text=t("tab_technical"))
+
+        self._tech_frame = tech_frame
+        self._period_var = tk.StringVar(value="day")
+        tab_frame = ttk.Frame(tech_frame)
+        tab_frame.pack(fill=tk.X, padx=8, pady=4)
+        for p, lbl in [("day", t("chart_day")), ("week", t("chart_week")), ("month", t("chart_month"))]:
+            ttk.Radiobutton(tab_frame, text=lbl, variable=self._period_var, value=p,
+                            command=self._draw_tech).pack(side=tk.LEFT, padx=6)
+
+        self._fig_frame = ttk.Frame(tech_frame)
+        self._fig_frame.pack(fill=tk.BOTH, expand=True, padx=4, pady=(0, 4))
+
+        # Load fundamental data
+        self._load_fundamental()
+
+        # Draw initial tech chart
+        self._init_tech_chart()
+
+    def _bg(self):
+        return "#1a1a1a" if self.theme_mode == "dark" else "#ffffff"
+
+    def _fg(self):
+        return "#cccccc" if self.theme_mode == "dark" else "#1a1a1a"
+
+    def _label_bg(self):
+        return "#2a2a2a" if self.theme_mode == "dark" else "#e0e0e0"
+
+    def _value_bg(self):
+        return "#3a3a3a" if self.theme_mode == "dark" else "#ffffff"
+
+    def _positive_color(self):
+        return "#66ff66" if self.theme_mode == "dark" else "#006600"
+
+    def _negative_color(self):
+        return "#ff6666" if self.theme_mode == "dark" else "#cc0000"
+
+    def _init_tech_chart(self):
+        """Initialize matplotlib for technical chart"""
+        try:
+            import matplotlib
+            matplotlib.use("TkAgg")
+            from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+            from matplotlib.figure import Figure
+            import pandas as pd
+            import numpy as np
+            self._FigureCanvasTkAgg = FigureCanvasTkAgg
+            self._Figure = Figure
+            self._pd = pd
+            self._np = np
+            self._draw_tech()
+        except Exception as e:
+            ttk.Label(self._fig_frame, text=f"Chart library error: {e}").pack(padx=20, pady=20)
+
+    def _draw_tech(self):
+        """Draw K-line chart in technical tab"""
+        for w in self._fig_frame.winfo_children():
+            w.destroy()
+
+        interval, period = self._params()
+        try:
+            raw = yf.Ticker(self.ticker).history(period=period, interval=interval)
+        except Exception as e:
+            ttk.Label(self._fig_frame, text=f"{self.ticker}: fetch error {e}").pack(padx=20, pady=20)
+            return
+        if raw is None or raw.empty:
+            ttk.Label(self._fig_frame, text=f"{self.ticker}: 無資料").pack(padx=20, pady=20)
+            return
+
+        raw = raw.tail(200)
+        dates = [d.strftime("%Y-%m-%d") if hasattr(d, "strftime") else str(d) for d in raw.index]
+        n = len(raw)
+
+        def _safe(series):
+            try:
+                s = self._pd.to_numeric(series, errors="coerce")
+                return s.fillna(0).values
+            except Exception:
+                return [0.0] * n
+
+        o = _safe(raw["Open"]); h = _safe(raw["High"]); l = _safe(raw["Low"])
+        c = _safe(raw["Close"]); v = _safe(raw["Volume"])
+        eps = 1e-9
+        is_dark = (self.theme_mode == "dark")
+        bg = "#1a1a1a" if is_dark else "#ffffff"
+        grid_c = "#333333" if is_dark else "#cccccc"
+        txt_c = "#929292" if is_dark else "#333333"
+        up_c = "#ff6666" if is_dark else "#cc0000"
+        dn_c = "#66ff66" if is_dark else "#006600"
+
+        fig = self._Figure(figsize=(8, 6), dpi=100)
+        fig.patch.set_facecolor(bg)
+        ax_k = fig.add_axes([0.07, 0.40, 0.90, 0.36])
+        ax_v = fig.add_axes([0.07, 0.29, 0.90, 0.10], sharex=ax_k)
+        ax_kd = fig.add_axes([0.07, 0.08, 0.90, 0.19], sharex=ax_k)
+
+        for ax in (ax_k, ax_v, ax_kd):
+            ax.set_facecolor(bg)
+            ax.grid(True, color=grid_c, linestyle="--", linewidth=0.4)
+            for sp in ax.spines.values():
+                sp.set_edgecolor(grid_c)
+
+        title = f"{self.ticker}  {self.name}  [{self._period_var.get().upper()} CHART]"
+        ax_k.set_title(title, color=txt_c, fontsize=10, fontweight="bold", loc="left")
+        ax_k.set_ylabel("Price", color=txt_c, fontsize=8)
+        ax_k.tick_params(colors=txt_c, labelsize=7, left=True, bottom=False, labelbottom=False)
+        ax_k.set_xlim(-0.5, n - 0.5)
+
+        for i in range(n):
+            oi, hi, li, ci = o[i], h[i], l[i], c[i]
+            col = up_c if ci >= oi else dn_c
+            if hi <= li:
+                hi = max(oi, ci) + eps
+                li = min(oi, ci) - eps
+            ax_k.plot([i, i], [li, hi], color=col, linewidth=0.9, solid_capstyle="butt")
+            bot, top = min(oi, ci), max(oi, ci)
+            if abs(top - bot) < eps:
+                d = max(abs(oi) * 0.005, eps)
+                bot -= d / 2; top += d / 2
+            ax_k.bar(i, top - bot, bottom=bot, width=0.52, color=col, edgecolor=col, linewidth=0.4)
+
+        # Volume
+        v_arr = self._pd.to_numeric(self._pd.Series(v), errors="coerce").values
+        v_arr = self._np.nan_to_num(v_arr, nan=0.0)
+        vmax = float(v_arr.max()) if v_arr.size and v_arr.max() > 0 else 1.0
+        vnorm = v_arr / max(vmax, 1.0)
+        xpos = list(range(n))
+        colors_v = [up_c if c[i] >= o[i] else dn_c for i in range(n)]
+        ax_v.bar(xpos, vnorm, color=colors_v, width=0.6)
+        ax_v.set_ylabel("Vol", color=txt_c, fontsize=6)
+        ax_v.tick_params(colors=txt_c, labelsize=6, left=True, bottom=False, labelbottom=False)
+
+        # KD
+        low9 = self._pd.Series(l).rolling(9, min_periods=1).min().values
+        hi9 = self._pd.Series(h).rolling(9, min_periods=1).max().values
+        denom = hi9 - low9
+        rsv = self._pd.Series([50.0] * n)
+        mask = denom != 0
+        rsv[mask] = (self._pd.Series(c)[mask] - low9[mask]) / denom[mask] * 100
+        k_arr = rsv.ewm(com=2, adjust=False).mean().values
+        d_arr = self._pd.Series(k_arr).ewm(com=2, adjust=False).mean().values
+        ax_kd.set_ylabel("KD", color=txt_c, fontsize=8)
+        ax_kd.tick_params(colors=txt_c, labelsize=7)
+        ax_kd.set_ylim(-10, 110)
+        ax_kd.axhline(80, color="#ff8800", linestyle=":", linewidth=0.8)
+        ax_kd.axhline(20, color="#0088ff", linestyle=":", linewidth=0.8)
+        ax_kd.plot(xpos, k_arr, color="#ff9900", linewidth=1.0, label="K")
+        ax_kd.plot(xpos, d_arr, color="#3399ff", linewidth=1.0, label="D")
+        ax_kd.legend(loc="upper left", fontsize=7, facecolor=bg, edgecolor=grid_c, labelcolor=txt_c)
+
+        step = max(1, n // 8)
+        xt = list(range(0, n, step))
+        if xt and xt[-1] != n - 1:
+            xt.append(n - 1)
+        ax_kd.set_xticks(xt)
+        ax_kd.set_xticklabels([dates[i] for i in xt], rotation=0, ha="center",
+                             fontsize=7, color=txt_c)
+
+        canvas = self._FigureCanvasTkAgg(fig, master=self._fig_frame)
+        canvas.draw()
+        canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+
+    def _params(self):
+        p = self._period_var.get()
+        if p == "day":
+            return "1d", "2y"
+        elif p == "week":
+            return "1wk", "10y"
+        else:
+            return "1mo", "30y"
+
+    def _load_fundamental(self):
+        """Load and display fundamental analysis data"""
+        def worker():
+            try:
+                ticker_obj = yf.Ticker(self.ticker)
+                info = ticker_obj.info
+
+                metrics = {
+                    t("metric_company_name"): info.get("longName") or info.get("shortName") or self.ticker,
+                    t("metric_market_cap"): self._fmt_market_cap(info.get("marketCap")),
+                    t("metric_eps"): self._fmt_eps(info.get("trailingEps")),
+                    t("metric_beta"): self._fmt_number(info.get("beta")),
+                    t("metric_trailing_pe"): self._fmt_number(info.get("trailingPE")),
+                    t("metric_forward_pe"): self._fmt_number(info.get("forwardPE")),
+                    t("metric_peg"): self._fmt_number(info.get("pegRatio")),
+                    t("metric_price_book"): self._fmt_number(info.get("priceToBook")),
+                    t("metric_roe"): self._fmt_pct(info.get("returnOnEquity")),
+                    t("metric_roa"): self._fmt_pct(info.get("returnOnAssets")),
+                    t("metric_op_margin"): self._fmt_pct(info.get("operatingMargins")),
+                    t("metric_profit_margin"): self._fmt_pct(info.get("profitMargins")),
+                    t("metric_fcf"): self._fmt_money(info.get("freeCashflow")),
+                    t("metric_quick_ratio"): self._fmt_number(info.get("quickRatio")),
+                    t("metric_target_mean"): self._fmt_price(info.get("targetMeanPrice")),
+                    t("metric_target_median"): self._fmt_price(info.get("targetMedianPrice")),
+                    t("metric_analyst_count"): self._fmt_number(info.get("numberOfAnalystOpinions")),
+                    t("metric_insider_pct"): self._fmt_pct(info.get("heldPercentInsiders")),
+                    t("metric_inst_pct"): self._fmt_pct(info.get("heldPercentInstitutions")),
+                    t("metric_ev_ebitda"): self._fmt_number(info.get("enterpriseToEbitda")),
+                    t("metric_dividend_yield"): self._fmt_yield(info.get("dividendYield")),
+                }
+
+                self.win.after(0, lambda: self._display_metrics(metrics))
+            except Exception as e:
+                self.win.after(0, lambda: self._show_error(str(e)))
+
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _fmt_market_cap(self, val):
+        if val is None or (isinstance(val, float) and math.isnan(val)):
+            return "N/A"
+        if isinstance(val, (int, float)):
+            if val >= 1e12:
+                return f"${val/1e12:.2f}T"
+            elif val >= 1e9:
+                return f"${val/1e9:.2f}B"
+            elif val >= 1e6:
+                return f"${val/1e6:.2f}M"
+            else:
+                return f"${val:,.0f}"
+        return str(val)
+
+    def _fmt_pct(self, val):
+        if val is None or (isinstance(val, float) and math.isnan(val)):
+            return "N/A"
+        if isinstance(val, (int, float)):
+            return f"{val*100:.2f}%"
+        return str(val)
+
+    def _fmt_eps(self, val):
+        """EPS - not percentage, show as decimal currency"""
+        if val is None or (isinstance(val, float) and math.isnan(val)):
+            return "N/A"
+        if isinstance(val, (int, float)):
+            return f"${val:.2f}"
+        return str(val)
+
+    def _fmt_number(self, val):
+        if val is None or (isinstance(val, float) and math.isnan(val)):
+            return "N/A"
+        if isinstance(val, (int, float)):
+            return f"{val:.2f}"
+        return str(val)
+
+    def _fmt_money(self, val):
+        if val is None or (isinstance(val, float) and math.isnan(val)):
+            return "N/A"
+        if isinstance(val, (int, float)):
+            if val >= 1e12:
+                return f"${val/1e12:.2f}T"
+            elif val >= 1e9:
+                return f"${val/1e9:.2f}B"
+            elif val >= 1e6:
+                return f"${val/1e6:.2f}M"
+            else:
+                return f"${val:,.0f}"
+        return str(val)
+
+    def _fmt_yield(self, val):
+        if val is None:
+            return "N/A"
+        if isinstance(val, (int, float)):
+            return f"{val:.2f}%"
+        return str(val)
+
+    def _fmt_price(self, val):
+        if val is None or (isinstance(val, float) and math.isnan(val)):
+            return "N/A"
+        if isinstance(val, (int, float)):
+            return f"${val:.2f}"
+        return str(val)
+
+    def _display_metrics(self, metrics: dict):
+        """Display metrics in scroll frame - horizontal layout"""
+        label_bg = self._label_bg()
+        value_bg = self._value_bg()
+        fg = self._fg()
+        pos_color = self._positive_color()
+        neg_color = self._negative_color()
+
+        # Company name header - 18pt
+        company_name = metrics.get(t("metric_company_name"), self.ticker)
+        header = tk.Label(self._scroll_frame, text=company_name, font=get_font(18),
+                         bg=self._bg(), fg=fg, anchor=tk.W)
+        header.pack(fill=tk.X, padx=10, pady=(10, 5))
+
+        # Separator
+        sep = tk.Frame(self._scroll_frame, height=2, bg=fg)
+        sep.pack(fill=tk.X, padx=10, pady=(0, 10))
+
+        # Collect metrics (skip company name)
+        items = [(k, v) for k, v in metrics.items() if k != t("metric_company_name")]
+
+        # Number of columns
+        num_cols = 2
+        # Split items into columns
+        col_size = (len(items) + num_cols - 1) // num_cols
+        columns = [items[i:i + col_size] for i in range(0, len(items), col_size)]
+
+        # Create horizontal container
+        h_frame = tk.Frame(self._scroll_frame, bg=self._bg())
+        h_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+
+        for col_items in columns:
+            # Column frame
+            col_frame = tk.Frame(h_frame, bg=self._bg())
+            col_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=5)
+
+            for key, value in col_items:
+                # Determine value color
+                val_color = fg
+                if key in [t("metric_roe"), t("metric_roa"), t("metric_op_margin"),
+                           t("metric_profit_margin")] and value != "N/A":
+                    try:
+                        num_val = float(value.rstrip("%")) / 100
+                        val_color = pos_color if num_val > 0 else neg_color
+                    except (ValueError, AttributeError):
+                        pass
+
+                row_frame = tk.Frame(col_frame, bg=self._bg())
+                row_frame.pack(fill=tk.X, padx=5, pady=2)
+
+                # Metrics font size 14pt
+                lbl = tk.Label(row_frame, text=key, width=20, font=get_font(14),
+                              bg=label_bg, fg=fg, anchor=tk.W, padx=5)
+                lbl.pack(side=tk.LEFT, padx=(0, 2))
+
+                val_lbl = tk.Label(row_frame, text=value, width=18, font=get_font(14),
+                                  bg=value_bg, fg=val_color, anchor=tk.E, padx=5)
+                val_lbl.pack(side=tk.LEFT)
+
+        # Update scroll region
+        self._scroll_frame.update_idletasks()
+        self._canvas.configure(scrollregion=self._canvas.bbox("all"))
+
+    def _show_error(self, msg: str):
+        error_lbl = tk.Label(self._scroll_frame, text=f"載入失敗: {msg}",
+                            font=get_font(), bg=self._bg(), fg="#ff6666")
+        error_lbl.pack(padx=20, pady=20)
+
+
+class NewsWindow:
+    """新聞視窗：顯示個股相關新聞"""
+    def __init__(self, parent, ticker, name, theme_mode="light"):
+        self.ticker = ticker
+        self.name = name
+        self.theme_mode = theme_mode
+
+        self.win = tk.Toplevel(parent)
+        self.win.title(f"{ticker} - {name} - {t('ctx_news')}")
+        self.win.geometry("1200x800")
+        self.win.transient(parent)
+        self.win.minsize(800, 400)
+
+        # Center window on screen
+        self.win.update_idletasks()
+        sw = self.win.winfo_screenwidth()
+        sh = self.win.winfo_screenheight()
+        w, h = 1200, 800
+        x = (sw - w) // 2
+        y = (sh - h) // 2
+        self.win.geometry(f"{w}x{h}+{x}+{y}")
+
+        # Main frame
+        main_frame = tk.Frame(self.win, bg=self._bg())
+        main_frame.pack(fill=tk.BOTH, expand=True)
+
+        # Canvas with scrollbar
+        canvas = tk.Canvas(main_frame, bg=self._bg(), highlightthickness=0)
+        scrollbar = ttk.Scrollbar(main_frame, orient=tk.VERTICAL, command=canvas.yview)
+        scroll_frame = tk.Frame(canvas, bg=self._bg())
+
+        scroll_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        canvas.create_window((0, 0), window=scroll_frame, anchor=tk.NW)
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        # Mousewheel scrolling
+        def _on_mousewheel(event):
+            try:
+                if canvas.winfo_exists():
+                    canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+            except tk.TclError:
+                pass
+        canvas.bind_all("<MouseWheel>", _on_mousewheel)
+
+        self._canvas = canvas
+        self._scroll_frame = scroll_frame
+
+        # Load news
+        self._load_news()
+
+        # Cleanup on close
+        self.win.protocol("WM_DELETE_WINDOW", self._on_close)
+
+    def _bg(self):
+        return "#1a1a1a" if self.theme_mode == "dark" else "#ffffff"
+
+    def _fg(self):
+        return "#cccccc" if self.theme_mode == "dark" else "#1a1a1a"
+
+    def _label_bg(self):
+        return "#2a2a2a" if self.theme_mode == "dark" else "#e0e0e0"
+
+    def _on_close(self):
+        if self._canvas and self._canvas.winfo_exists():
+            self._canvas.unbind_all("<MouseWheel>")
+        self.win.destroy()
+
+    def _open_link(self, url):
+        """Open URL in default browser"""
+        if url and url != "（無連結）":
+            webbrowser.open(url)
+
+    def _load_news(self):
+        """Load and display news"""
+        def worker():
+            try:
+                stock = yf.Ticker(self.ticker)
+                news_list = stock.news or []
+
+                if not news_list:
+                    self.win.after(0, lambda: self._display_empty())
+                    return
+
+                # Extract news data (up to 10)
+                news_data = []
+                for news in news_list[:10]:
+                    content = news.get("content", {})
+                    title = content.get("title", "（無標題）")
+                    link_dict = content.get("clickThroughUrl", {})
+                    link = link_dict.get("url", "") if isinstance(link_dict, dict) else ""
+                    provider_dict = content.get("provider", {})
+                    publisher = provider_dict.get("displayName", "未知來源") if isinstance(provider_dict, dict) else "未知來源"
+                    pub_date = content.get("pubDate", "")
+                    # Format time
+                    if "T" in pub_date:
+                        pub_date = pub_date.replace("T", " ").replace("Z", " UTC")
+
+                    news_data.append({
+                        "title": title,
+                        "link": link,
+                        "publisher": publisher,
+                        "pub_date": pub_date or "未知時間"
+                    })
+
+                self.win.after(0, lambda: self._display_news(news_data))
+            except Exception as e:
+                self.win.after(0, lambda: self._show_error(str(e)))
+
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _display_news(self, news_data: list):
+        """Display news in scroll frame"""
+        bg = self._bg()
+        fg = self._fg()
+        label_bg = self._label_bg()
+
+        # Header
+        header = tk.Label(self._scroll_frame, text=f"{self.ticker} {t('ctx_news')}",
+                         font=get_font(20), bg=bg, fg=fg, anchor=tk.W)
+        header.pack(fill=tk.X, padx=10, pady=(10, 5))
+
+        # Separator
+        sep = tk.Frame(self._scroll_frame, height=2, bg=fg)
+        sep.pack(fill=tk.X, padx=10, pady=(0, 10))
+
+        for idx, news in enumerate(news_data):
+            # News item frame
+            item_frame = tk.Frame(self._scroll_frame, bg=label_bg)
+            item_frame.pack(fill=tk.X, padx=10, pady=5)
+
+            # Source and time
+            meta_text = f"[{news['publisher']}] - {news['pub_date']}"
+            meta_lbl = tk.Label(item_frame, text=meta_text, font=get_font(12),
+                               bg=label_bg, fg="#888888", anchor=tk.W)
+            meta_lbl.pack(fill=tk.X, padx=5, pady=(5, 2))
+
+            # Title (clickable)
+            title_lbl = tk.Label(item_frame, text=news["title"], font=get_font(14),
+                                bg=label_bg, fg="#5588ff" if news["link"] else fg,
+                                anchor=tk.W, cursor="hand2")
+            title_lbl.pack(fill=tk.X, padx=5, pady=(0, 2))
+
+            if news["link"]:
+                title_lbl.bind("<Button-1>", lambda e, url=news["link"]: self._open_link(url))
+                title_lbl.bind("<Enter>", lambda e, l=title_lbl: l.config(fg="#ffaa00"))
+                title_lbl.bind("<Leave>", lambda e, l=title_lbl: l.config(fg="#5588ff"))
+
+            # Link text
+            if news["link"]:
+                link_lbl = tk.Label(item_frame, text=f"🔗 {news['link']}",
+                                   font=get_font(12), bg=label_bg, fg="#666666",
+                                   anchor=tk.W, cursor="hand2")
+                link_lbl.pack(fill=tk.X, padx=5, pady=(0, 5))
+                link_lbl.bind("<Button-1>", lambda e, url=news["link"]: self._open_link(url))
+                link_lbl.bind("<Enter>", lambda e, l=link_lbl: l.config(fg="#ffaa00"))
+                link_lbl.bind("<Leave>", lambda e, l=link_lbl: l.config(fg="#666666"))
+
+        # Update scroll region
+        self._scroll_frame.update_idletasks()
+        self._canvas.configure(scrollregion=self._canvas.bbox("all"))
+
+    def _display_empty(self):
+        """Display when no news found"""
+        bg = self._bg()
+        fg = self._fg()
+        empty_lbl = tk.Label(self._scroll_frame, text=f"{self.ticker} 無相關新聞",
+                            font=get_font(14), bg=bg, fg=fg, padx=20, pady=20)
+        empty_lbl.pack()
+
+    def _show_error(self, msg: str):
+        """Display error message"""
+        bg = self._bg()
+        error_lbl = tk.Label(self._scroll_frame, text=f"載入失敗: {msg}",
+                            font=get_font(), bg=bg, fg="#ff6666", padx=20, pady=20)
+        error_lbl.pack()
 
 
 class ChartWindow:
@@ -750,6 +1362,7 @@ class WatchlistApp:
             self.item_tree.column(col_id, width=w, anchor=anchor)
         self.item_tree.pack(fill=tk.BOTH, expand=True, padx=4, pady=(0, 4))
         self.item_tree.bind("<Double-1>", self._on_item_double_click)
+        self.item_tree.bind("<Button-3>", self._on_item_right_click)
 
         # 設定 Treeview 行高和字體（根據字體大小動態調整）
         try:
@@ -1451,6 +2064,38 @@ class WatchlistApp:
         wl_items = self.watchlists.get(self.active_wl, [])
         name = next((it[2] for it in wl_items if it[1] == ticker), ticker)
         ChartWindow(self.root, ticker, name, theme_mode=_get_effective_theme())
+
+    def _on_item_right_click(self, event):
+        """Show right-click context menu for fundamental/technical analysis"""
+        # Get item under cursor
+        item_id = self.item_tree.identify_row(event.y)
+        if not item_id:
+            return
+        # Select the item
+        self.item_tree.selection_set(item_id)
+        self.item_tree.focus(item_id)
+
+        # Get ticker and name
+        ticker = item_id
+        wl_items = self.watchlists.get(self.active_wl, [])
+        name = next((it[2] for it in wl_items if it[1] == ticker), ticker)
+
+        # Create context menu
+        colors = self._get_dialog_colors()
+        menu = tk.Menu(self.root, tearoff=0,
+                      bg=colors["bg"], fg=colors["fg"],
+                      activebackground=colors["list_sel"],
+                      activeforeground=colors["fg"],
+                      font=get_font())
+
+        menu.add_command(label=t("ctx_fundamental"),
+                        command=lambda: FundamentalAnalysisWindow(self.root, ticker, name, theme_mode=_get_effective_theme()))
+        menu.add_command(label=t("ctx_technical"),
+                        command=lambda: ChartWindow(self.root, ticker, name, theme_mode=_get_effective_theme()))
+        menu.add_command(label=t("ctx_news"),
+                        command=lambda: NewsWindow(self.root, ticker, name, theme_mode=_get_effective_theme()))
+
+        menu.tk_popup(event.x_root, event.y_root)
 
     def _refresh_all(self):
         self.btn_refresh.config(state=tk.DISABLED)
