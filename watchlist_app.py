@@ -130,6 +130,7 @@ LANG = {
     "fundamental_title":{"zh-TW":"基本面分析","zh-CN":"基本面分析","en":"Fundamental Analysis","ja":"ファンダメンタル分析","ko":"펀더멘탈 분석","es":"Análisis Fundamental"},
     "tab_fundamental":{"zh-TW":"基本面","zh-CN":"基本面","en":"Fundamental","ja":"ファンダ","ko":"펀더","es":"Fundamental"},
     "tab_technical":{"zh-TW":"技術面","zh-CN":"技术面","en":"Technical","ja":"テクニカル","ko":"기술","es":"Técnico"},
+ "tab_categorized":{"zh-TW":"分類分析","zh-CN":"分類指标","en":"Categorized Analysis","ja":"分類分析","ko":"분류분석","es":"Análisis Categorizado"},
     "metric_company_name":{"zh-TW":"公司名稱","zh-CN":"公司名称","en":"Company","ja":"会社名","ko":"회사명","es":"Empresa"},
     "metric_market_cap":{"zh-TW":"市值","zh-CN":"市值","en":"Market Cap","ja":"時価総額","ko":"시가총액","es":"Cap. Mercado"},
     "metric_eps":{"zh-TW":"每股盈餘","zh-CN":"每股收益","en":"EPS","ja":"EPS","ko":"EPS","es":"EPS"},
@@ -150,6 +151,13 @@ LANG = {
     "metric_analyst_count":{"zh-TW":"評估分析師人數","zh-CN":"评估分析师人数","en":"Analyst Count","ja":"アナリスト数","ko":"애널리스트 수","es":"Nº Analistas"},
     "metric_insider_pct":{"zh-TW":"內部人持股","zh-CN":"内部人持股","en":"Insider %","ja":"内部者保有率","ko":"인사이드 보유율","es":"% Insiders"},
     "metric_inst_pct":{"zh-TW":"機構持股","zh-CN":"机构持股","en":"Institutional %","ja":"機関投資家保有率","ko":"기관 보유율","es":"% Instituc."},
+    "metric_rec_mean":{"zh-TW":"券商推薦均值","zh-CN":"券商推荐均值","en":"Rec. Mean","ja":"レコメンド平均","ko":"추천 평균","es":"Rec. Media"},
+    "metric_short_pct":{"zh-TW":"放空比例","zh-CN":"放空比例","en":"Short %","ja":"ショート割合","ko":"공매도 비율","es":"% Corto"},
+    "metric_52w_high":{"zh-TW":"52週高點","zh-CN":"52周高点","en":"52W High","ja":"52週高値","ko":"52주 최고가","es":"Máx 52S"},
+    "metric_52w_low":{"zh-TW":"52週低點","zh-CN":"52周低点","en":"52W Low","ja":"52週安値","ko":"52주 최저가","es":"Mín 52S"},
+    "metric_fcf_coverage":{"zh-TW":"FCF股利覆蓋率","zh-CN":"FCF股利覆盖率","en":"FCF Div. Coverage","ja":"FCF配当カバー率","ko":"FCF배당 커버리지","es":"Cobertura FCF"},
+    "metric_fcf_yield":{"zh-TW":"FCF殖利率","zh-CN":"FCF殖利率","en":"FCF Yield","ja":"FCF利回り","ko":"FCF 수익률","es":"Rend. FCF"},
+    "metric_roic":{"zh-TW":"投入資本回報率","zh-CN":"投入资本回报率","en":"ROIC","ja":"ROIC","ko":"ROIC","es":"ROIC"},
     "metric_ev_ebitda":{"zh-TW":"企業價值/EBITDA","zh-CN":"企业价值/EBITDA","en":"EV/EBITDA","ja":"EV/EBITDA","ko":"EV/EBITDA","es":"EV/EBITDA"},
     "metric_dividend_yield":{"zh-TW":"殖利率","zh-CN":"股息率","en":"Div. Yield","ja":"配当利回り","ko":"배당수익률","es":"Rend. Divid."},
     "theme_menu":{"zh-TW":"主題","zh-CN":"主题","en":"Theme","ja":"テーマ","ko":"테마","es":"Tema"},
@@ -676,6 +684,50 @@ class FundamentalAnalysisWindow:
                 ticker_obj = yf.Ticker(self.ticker)
                 info = ticker_obj.info
 
+                # Helper function for safe data extraction
+                def get_df_value(df, keys):
+                    for key in keys:
+                        if df is not None and key in df.index:
+                            return df.loc[key].iloc[0]
+                    return 0
+
+                # Calculate ROIC, FCF Yield, FCF Dividend Coverage
+                try:
+                    financials = ticker_obj.financials
+                    balancesheet = ticker_obj.balance_sheet
+                    cashflow = ticker_obj.cashflow
+
+                    market_cap = info.get("marketCap", 0) or 0
+                    fcf = get_df_value(cashflow, ["Free Cash Flow"])
+                    dividend_payout = abs(get_df_value(cashflow, ["Cash Dividends Paid", "Dividend Payout"]))
+
+                    ebit = get_df_value(financials, ["EBIT", "Operating Income"])
+                    tax_provision = get_df_value(financials, ["Tax Provision"])
+                    pretax_income = get_df_value(financials, ["Pretax Income"])
+
+                    effective_tax_rate = (tax_provision / pretax_income) if pretax_income > 0 else 0
+                    nopat = ebit * (1 - effective_tax_rate)
+
+                    total_equity = get_df_value(balancesheet, ["Stockholders Equity", "Total Equity Gross"])
+                    short_debt = get_df_value(balancesheet, ["Current Debt", "Short Long Term Debt"])
+                    long_debt = get_df_value(balancesheet, ["Long Term Debt"])
+                    total_debt = short_debt + long_debt
+
+                    cash_and_equiv = get_df_value(balancesheet, ["Cash And Cash Equivalents"])
+                    st_investments = get_df_value(balancesheet, ["Other Short Term Investments", "Short Term Investments"])
+                    cash_pool = cash_and_equiv + st_investments
+
+                    invested_capital = total_equity + total_debt - cash_pool
+
+                    # ROIC
+                    roic = (nopat / invested_capital * 100) if invested_capital > 0 else None
+                    # FCF Yield
+                    fcf_yield = (fcf / market_cap * 100) if market_cap > 0 else None
+                    # FCF Dividend Coverage
+                    fcf_coverage = (fcf / dividend_payout) if dividend_payout > 0 else None
+                except Exception:
+                    roic, fcf_yield, fcf_coverage = None, None, None
+
                 metrics = {
                     t("metric_company_name"): info.get("longName") or info.get("shortName") or self.ticker,
                     t("metric_market_cap"): self._fmt_market_cap(info.get("marketCap")),
@@ -696,6 +748,13 @@ class FundamentalAnalysisWindow:
                     t("metric_analyst_count"): self._fmt_number(info.get("numberOfAnalystOpinions")),
                     t("metric_insider_pct"): self._fmt_pct(info.get("heldPercentInsiders")),
                     t("metric_inst_pct"): self._fmt_pct(info.get("heldPercentInstitutions")),
+                    t("metric_rec_mean"): self._fmt_number(info.get("recommendationMean")),
+                    t("metric_short_pct"): self._fmt_pct(info.get("shortPercentOfFloat")),
+                    t("metric_52w_high"): self._fmt_price(info.get("fiftyTwoWeekHigh")),
+                    t("metric_52w_low"): self._fmt_price(info.get("fiftyTwoWeekLow")),
+                    t("metric_fcf_coverage"): self._fmt_number(fcf_coverage),
+                    t("metric_fcf_yield"): self._fmt_pct2(fcf_yield) if fcf_yield else "N/A",
+                    t("metric_roic"): self._fmt_pct2(roic) if roic else "N/A",
                     t("metric_ev_ebitda"): self._fmt_number(info.get("enterpriseToEbitda")),
                     t("metric_dividend_yield"): self._fmt_yield(info.get("dividendYield")),
                 }
@@ -725,6 +784,14 @@ class FundamentalAnalysisWindow:
             return "N/A"
         if isinstance(val, (int, float)):
             return f"{val*100:.2f}%"
+        return str(val)
+
+    def _fmt_pct2(self, val):
+        """Format percentage value that's already in % form (not decimal)"""
+        if val is None or (isinstance(val, float) and math.isnan(val)):
+            return "N/A"
+        if isinstance(val, (int, float)):
+            return f"{val:.2f}%"
         return str(val)
 
     def _fmt_eps(self, val):
